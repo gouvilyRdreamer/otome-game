@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-import { boxScenarios } from '../scenarios/BoxScenario';
-import { exScenarios } from '../scenarios/ExScenario';
-import { neoScenarios } from '../scenarios/NeoScenario';
+import { createBoxScenarios } from '../scenarios/BoxScenario';
+import { createExScenarios } from '../scenarios/ExScenario';
+import { createNeoScenarios } from '../scenarios/NeoScenario';
 import { Scene, Choice, Character } from '../types/index';
 
 interface GameProps {
@@ -76,6 +76,17 @@ const TextBox = styled.div`
   font-size: 20px;
   line-height: 1.6;
   font-weight: 400;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+
+  button {
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+  }
 `;
 
 const TextContent = styled.div`
@@ -235,6 +246,16 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
   const [isGameOver, setIsGameOver] = useState(false);
   const [scenes, setScenes] = useState<Scene[]>(initialScenes);
   const [responseQueue, setResponseQueue] = useState<string[]>([]);
+  const [playerName, setPlayerName] = useState("");
+  const [isNameInput, setIsNameInput] = useState(false);
+
+  const handleNameSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (playerName.trim()) {
+      setIsNameInput(false);
+      setCurrentInterviewerScene(prev => prev + 1);
+    }
+  };
 
   const handleTextBoxClick = () => {
     if (showResponse) {
@@ -243,6 +264,12 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
       const currentSceneData = getCurrentSceneData();
       if (currentSceneData?.choices) {
         // 選択肢がある場合は何もしない（選択肢を表示する）
+        return;
+      }
+      
+      // 名前入力シーンの場合
+      if (currentSceneData?.text === "「それじゃ、まずはキミの名前を教えてくれるかな？」") {
+        setIsNameInput(true);
         return;
       }
       
@@ -333,8 +360,8 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
     if (isGameOver) {
       return {
         text: favorability >= 10 
-          ? `面接が終わりました。\n好感度: ${favorability}\n${selectedInterviewer}さんから「採用！」の声がかかりました！\nこれから一緒に楽しく働けそうですね！`
-          : `面接が終わりました。\n好感度: ${favorability}\n残念ながら今回は採用を見送らせていただきます。\nまたの機会に...`,
+          ? `${playerName}さん、面接が終わりました。\n好感度: ${favorability}\n${selectedInterviewer}さんから「採用！」の声がかかりました！\nこれから一緒に楽しく働けそうですね！`
+          : `${playerName}さん、面接が終わりました。\n好感度: ${favorability}\n残念ながら今回は採用を見送らせていただきます。\nまたの機会に...`,
         background: "/images/office-entrance.jpg",
         choices: [
           { text: "最初からやり直す", responses: [""], favorabilityChange: 0 }
@@ -356,11 +383,11 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
 
   const getCurrentInterviewerScenarios = () => {
     if (selectedInterviewer === "箱") {
-      return boxScenarios;
+      return createBoxScenarios(playerName);
     } else if (selectedInterviewer === "メタトンEX") {
-      return exScenarios;
+      return createExScenarios(playerName);
     } else if (selectedInterviewer === "メタトンNEO") {
-      return neoScenarios;
+      return createNeoScenarios(playerName);
     }
     return [];
   };
@@ -385,8 +412,25 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
         {!showResponse ? (
           <>
             <TextContent>
-              {currentSceneData.text}
-              {!currentSceneData.choices && <DownArrow>▼</DownArrow>}
+              {isNameInput ? (
+                <NameInputForm onSubmit={handleNameSubmit}>
+                  <NameInput
+                    type="text"
+                    value={playerName}
+                    onChange={(e) => setPlayerName(e.target.value)}
+                    placeholder="入力してください"
+                    autoFocus
+                  />
+                  <SubmitButton type="submit" disabled={!playerName.trim()}>
+                    決定
+                  </SubmitButton>
+                </NameInputForm>
+              ) : (
+                <>
+                  {currentSceneData.text}
+                  {!currentSceneData.choices && <DownArrow>▼</DownArrow>}
+                </>
+              )}
             </TextContent>
             {currentScene === 5 ? (
               <InterviewerContainer>
@@ -447,5 +491,53 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
     </GameContainer>
   );
 };
+
+const NameInputForm = styled.form`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+`;
+
+const NameInput = styled.input`
+  width: 70%;
+  padding: 10px;
+  font-size: 1.2em;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  
+  &:focus {
+    outline: none;
+    border-color: #ff69b4;
+  }
+  
+  &::placeholder {
+    color: #999;
+  }
+`;
+
+const SubmitButton = styled.button`
+  padding: 10px 20px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 5px;
+  background: #ff69b4;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background: #ff69b4;
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+`;
 
 export default Game; 
