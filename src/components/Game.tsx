@@ -206,19 +206,19 @@ const scenes: Scene[] = [
     background: "/images/office-entrance.jpg"
   },
   {
-    text: "会社のホームページによると、最終面接は「特別な面接官」が担当するとのこと。",
+    text: "企業ホームページによると、最終面接は「社長面接」。",
     background: "/images/office-entrance.jpg"
   },
   {
-    text: "その面接官とは、なんと人気アイドル「メタトン」だそう！",
+    text: "つまり、面接官は、なんとあの人気アイドル兼スゴ腕経営者の「メタトン」！",
     background: "/images/office-entrance.jpg"
   },
   {
-    text: "メタトンには3つの形態があり、それぞれ異なる面接官が担当してくれるらしい。",
+    text: "メタトンには3つの形態があって、求職者が好きな形態を選んで面接してもらえるらしい。",
     background: "/images/office-entrance.jpg"
   },
   {
-    text: "どの面接官に面接してもらおうかな...",
+    text: "どの面接官にしようかな...？",
     background: "/images/office-entrance.jpg",
     choices: [
       { text: "BOX METATON", response: "", favorabilityChange: 0, nextScene: 7 },
