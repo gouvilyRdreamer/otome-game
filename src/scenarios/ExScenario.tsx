@@ -21,8 +21,7 @@ export const createExScenarios = (playerName: string): Scene[] => {
         id: 1,
         name: 'メタトンEX',
         image: 'metaton-ex.png'
-      },
-      choices: []
+      }
     },
     {
       text: "「では、面接を始めましょう」",

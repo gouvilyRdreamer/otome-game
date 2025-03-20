@@ -21,8 +21,7 @@ export const createNeoScenarios = (playerName: string): Scene[] => {
         id: 1,
         name: 'メタトンNEO',
         image: 'metaton-neo.png'
-      },
-      choices: []
+      }
     },
     {
       text: "「では、面接を始めましょう」",
