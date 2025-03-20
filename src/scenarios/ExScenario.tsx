@@ -1,11 +1,17 @@
-import { Scenario } from '../types';
+import { Scene, Choice } from '../types/index';
 
-export const exScenarios: Scenario[] = [
+const createChoice = (text: string, response: string, favorabilityChange: number): Choice => ({
+  text,
+  response,
+  favorabilityChange
+});
+
+export const exScenarios: Scene[] = [
   {
     text: "「では、面接を始めましょう」",
     background: "/images/room.jpg",
     character: {
-      id: 1,
+      id: 2,
       name: "メタトンEX",
       image: "/images/metaton_ex.png"
     }
@@ -14,72 +20,112 @@ export const exScenarios: Scenario[] = [
     text: "「自己紹介をお願いします」",
     background: "/images/room.jpg",
     character: {
-      id: 1,
+      id: 2,
       name: "メタトンEX",
       image: "/images/metaton_ex.png"
     },
     choices: [
-      "「私は乙女ゲームが大好きな大学3年生です」",
-      "「私は就活に励む大学3年生です」"
+      createChoice(
+        "「私は乙女ゲームが大好きな大学3年生です」",
+        "「乙女ゲーム好きなんだね！ じゃあ、クイズ！ 僕の好きなゲームは何でしょう？」",
+        2
+      ),
+      createChoice(
+        "「私は就活に励む大学3年生です」",
+        "「就活頑張ってるんだね！ じゃあ、クイズ！ 就活で一番大切なのは何でしょう？」",
+        1
+      )
     ]
   },
   {
-    text: "「乙女ゲームが好きなんですね！ 僕もエンターテイメントが大好きなんだ。でもね、NEOはああいうの苦手なんだよね。彼はもっと...」",
+    text: "「乙女ゲームが好きなんですね！ じゃあ、箱とNEOのどっちが好き？ え？ どっちも？ ふふっ、面白いね。でも、僕のクイズの方が面白いでしょ？」",
     background: "/images/room.jpg",
     character: {
-      id: 1,
+      id: 2,
       name: "メタトンEX",
       image: "/images/metaton_ex.png"
     },
     choices: [
-      "「NEOさんは独自の魅力を持っていますよ」",
-      "「NEOさんも一緒に楽しめばいいのに」"
+      createChoice(
+        "「箱さんとNEOさんはそれぞれ魅力がありますが、EXさんのユーモアも素敵です」",
+        "「そうだよね！ 僕のユーモアは最高でしょ？ じゃあ、クイズ！ 僕の一番面白いジョークは何でしょう？」",
+        3
+      ),
+      createChoice(
+        "「EXさんのクイズは独特で面白いですね」",
+        "「そうだよね！ じゃあ、クイズ！ 僕のクイズの特徴は何でしょう？」",
+        2
+      )
     ]
   },
   {
     text: "「なるほど。では、なぜMETAフーズを志望されたのですか？」",
     background: "/images/room.jpg",
     character: {
-      id: 1,
+      id: 2,
       name: "メタトンEX",
       image: "/images/metaton_ex.png"
     },
     choices: [
-      "「テレビで見るメタトンさんの姿に憧れているからです」",
-      "「METAフーズの商品が大好きだからです」"
+      createChoice(
+        "「テレビで見るメタトンさんの姿に憧れているからです」",
+        "「テレビで見てたんだね！ じゃあ、クイズ！ 僕のテレビでの一番人気のコーナーは何でしょう？」",
+        2
+      ),
+      createChoice(
+        "「METAフーズの商品が大好きだからです」",
+        "「商品好きなんだね！ じゃあ、クイズ！ 僕の一番好きな商品は何でしょう？」",
+        1
+      )
     ]
   },
   {
-    text: "「君は僕のミューズになれるかな？ 僕と一緒に、もっと華やかな世界を作っていこう！」",
+    text: "「箱は面白いし、NEOは格好いいけど、僕は派手！ 君も派手になりたい？」",
     background: "/images/room.jpg",
     character: {
-      id: 1,
+      id: 2,
       name: "メタトンEX",
       image: "/images/metaton_ex.png"
     },
     choices: [
-      "「はい、ぜひお手伝いさせてください！」",
-      "「NEOさんも誘って、3人で一緒に作り上げていきましょう」"
+      createChoice(
+        "「はい、EXさんのように派手になりたいです」",
+        "「そうだよね！ じゃあ、クイズ！ 派手になるために必要なものは何でしょう？」",
+        3
+      ),
+      createChoice(
+        "「EXさんのユーモアを学びたいです」",
+        "「そうだよね！ じゃあ、クイズ！ 僕のユーモアの特徴は何でしょう？」",
+        2
+      )
     ]
   },
   {
     text: "「最後に、何か質問はありますか？」",
     background: "/images/room.jpg",
     character: {
-      id: 1,
+      id: 2,
       name: "メタトンEX",
       image: "/images/metaton_ex.png"
     },
     choices: [
-      "「入社後、どのような仕事を任せていただけますか？」",
-      "「社内の雰囲気について教えていただけますか？」"
+      createChoice(
+        "「入社後、どのような仕事を任せていただけますか？」",
+        "「面白い仕事を任せるよ！ じゃあ、クイズ！ 僕の一番面白い仕事は何でしょう？」",
+        2
+      ),
+      createChoice(
+        "「社内の雰囲気について教えていただけますか？」",
+        "「とても面白い雰囲気だよ！ じゃあ、クイズ！ 社内で一番面白い場所はどこでしょう？」",
+        1
+      )
     ]
   },
   {
-    text: "「素晴らしい！ 君は僕のミューズにぴったりだ！ 採用だよ！」",
+    text: "「君、面白いね！ 採用だよ！ これからもっと面白いことを教えてあげる！」",
     background: "/images/room.jpg",
     character: {
-      id: 1,
+      id: 2,
       name: "メタトンEX",
       image: "/images/metaton_ex.png"
     }
