@@ -200,28 +200,28 @@ const InterviewerName = styled.div`
 
 const initialScenes: Scene[] = [
   {
-    text: "私の名前は yume。今日はMETA Foodsの最終面接を受けに来ました。",
-    background: "/images/office-entrance.jpg"
+    text: "私は絶賛就活中の大学3年生！\nじつは、第一希望の最終面接を控えてる・・・",
+    background: "/images/campus.jpg"
   },
   {
     text: "META Foodsは、世界中の食品を取り扱う大手商社。",
-    background: "/images/office-entrance.jpg"
+    background: "/images/campus.jpg"
   },
   {
     text: "企業ホームページによると、最終面接は「社長面接」。",
-    background: "/images/office-entrance.jpg"
+    background: "/images/campus.jpg"
   },
   {
     text: "つまり、面接官は、なんとあの人気アイドル兼スゴ腕経営者の「メタトン」！",
-    background: "/images/office-entrance.jpg"
+    background: "/images/campus.jpg"
   },
   {
     text: "メタトンには3つの形態があって、求職者が好きな形態を選んで面接してもらえるらしい。",
-    background: "/images/office-entrance.jpg"
+    background: "/images/campus.jpg"
   },
   {
-    text: "どの面接官にしようかな...？",
-    background: "/images/office-entrance.jpg",
+    text: "誰に面接してもらう？",
+    background: "/images/campus.jpg",
     choices: [
       { text: "BOX METATON", responses: [""], favorabilityChange: 0, nextScene: 7 },
       { text: "METATON EX", responses: [""], favorabilityChange: 0, nextScene: 7 },
@@ -230,7 +230,7 @@ const initialScenes: Scene[] = [
   },
   {
     text: "緊張するなあ...",
-    background: "/images/office-entrance.jpg"
+    background: "/images/room.jpg"
   }
 ];
 

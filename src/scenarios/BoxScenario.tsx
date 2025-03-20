@@ -33,7 +33,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       }
     },
     {
-      text: "（えっ？箱・・・？）",
+      text: "（えっ？）",
       background: "/images/room.jpg",
       character: {
         id: 1,
@@ -42,7 +42,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       }
     },
     {
-      text: "（どうやって、椅子に座って・・・？）",
+      text: "（いま、どうやって、椅子に座って・・・？）",
       background: "/images/room.jpg",
       character: {
         id: 1,
@@ -78,6 +78,33 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       }
     },
     {
+      text: `「${playerName}ちゃんだね。よろしく」`,
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
+      text: "「よろしくお願いします！」",
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
+      text: "（よ～し、がんばるぞ～！）",
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
       text: "（うう・・・　緊張する・・・）",
       background: "/images/room.jpg",
       character: {
@@ -87,7 +114,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       }
     },
     {
-      text: "「うんうん、緊張しちゃうよね～。ボク、かたっくるしいのは正直ニガテでさ。」",
+      text: "「うんうん、緊張しちゃうよね～。ボク、カタっくるしいのは正直ニガテでさ。\n肩ひじ張らずに、リラックスしてね」",
       background: "/images/room.jpg",
       character: {
         id: 1,
@@ -105,7 +132,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       }
     },
     {
-      text: "「ボク、昔からお芝居が好きで、\n去年社内にサークル作っちゃったんだよね」",
+      text: "「ボク、昔からお芝居が好きで、\n去年社内にサークルを作ったんだ」",
       background: "/images/room.jpg",
       character: {
         id: 1,
@@ -114,7 +141,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       }
     },
     {
-      text: `「${playerName}ちゃんはなにか趣味とか特技ってあるかな？」`,
+      text: `「${playerName}ちゃんは、なにか趣味や特技ってある？」`,
       background: "/images/room.jpg",
       character: {
         id: 1,
@@ -123,7 +150,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       }
     },
     {
-      text: "「趣味や特技はありますか？」",
+      text: "「趣味や特技は？」",
       background: "/images/room.jpg",
       character: {
         id: 1,
@@ -134,10 +161,10 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
         createChoice(
           "「マンガを読むのが好きです。」",
           [
-            "「へえ、そうなんだ。」",
+            "「へえ？そうなんだ。」",
             "「どんなジャンルが好きなの？」",
             "「・・・」",
-            "ボク、何かに打ち込んでいる子って好きだなぁ」",
+            "「ボク、何かに打ち込んでいる子って好きだな」",
             "（・・・あれ、意外と怖くない、ヒト・・・？なのかな？）"
           ],
           2,
@@ -147,7 +174,9 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
           "「就活に打ち込んでます、かね」",
           [
             "「就活頑張ってるんだね！」",
-            `「でもそれは、${playerName}ちゃんがどうしても「やりたい！」ことかな？」`,
+            `「でもそれって、${playerName}ちゃんがどうしてもやりたいこと？」`,
+            "「えっと、それはその」",
+            "「・・・」",
             "（う・・・！　マズったぁ・・・）"
           ],
           -1,
@@ -156,8 +185,8 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
         createChoice(
           "「ギャンブルですかね・・・」",
           [
-            "「え？そうなの？」",
-            "「見かけによらない、思い切りのいいコなんだね」",
+            "「へえ？そうなんだ」",
+            "「見かけによらず、思い切りのいいコなんだね」",
             "（よし！　企業研究が効いたみたい！）"
           ],
           3,
@@ -231,31 +260,23 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
         createChoice(
           "「マンガを読むのが好きです！」",
           [
-            "「そうだよね！ じゃあ、クイズ！ 僕のクイズの特徴は何でしょう？」",
-            "「ヒント：僕のキャラクター性に関係があるよ！」"
+            "「ん～、趣味はさっき聞いたかな」",
+            "（う・・・！　マズったぁ・・・）"
           ],
-          0,
+          -1,
           4
         ),
         createChoice(
           "「いえ、特に・・・・・・・。」",
           [
-            "「そうだよね！ じゃあ、クイズ！ 僕のクイズの特徴は何でしょう？」",
-            "「ヒント：僕のキャラクター性に関係があるよ！」"
+            "「・・・」",
+            "「本当に？」",
+            "（う・・・！　マズったぁ・・・）"
           ],
           -1,
           4
         )
       ]
-    },
-    {
-      text: "「\n」",
-      background: "/images/room.jpg",
-      character: {
-        id: 1,
-        name: "箱",
-        image: "/images/box.png"
-      }
     },
     {
       text: "（なかなか調子いいかも・・・！）",
@@ -267,7 +288,34 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       }
     },
     {
-      text: "「なるほど。では、なぜMETAフーズを志望されたのですか？」",
+      text: `「${playerName}ちゃんのことをもっと知りたいな」`,
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
+      text: `「あ、そうだ。　${playerName}ちゃんは自分のどんなところが好き？」`,
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
+      text: `（私の長所、それはもちろん・・・）`,
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
+      text: "「キミの長所は？」",
       background: "/images/room.jpg",
       character: {
         id: 1,
@@ -276,19 +324,30 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       },
       choices: [
         createChoice(
-          "「テレビで見るメタトンさんの姿に憧れているからです」",
+          "「諦めが悪いところ」",
           [
-            "「テレビで見てたんだね！ じゃあ、クイズ！ 僕のテレビでの一番人気のコーナーは何でしょう？」",
-            "「ヒント：僕の特技を活かしたコーナーだよ！」"
+            "「ほう？」",
+            "「往生際が悪いってこと？　いいじゃない」"
           ],
           2,
           5
         ),
         createChoice(
-          "「METAフーズの商品が大好きだからです」",
+          "「そんなの無いです」",
           [
-            "「商品好きなんだね！ じゃあ、クイズ！ 僕の一番好きな商品は何でしょう？」",
-            "「ヒント：僕のキャラクター商品だよ！」"
+            "「ワオ！　それは困った！」",
+            "「もっと自信を持って！」",
+            "「ヒント：女の子は笑顔が一番」",
+            "（うう・・・　もっと対策しておけばよかったぁ・・・）"
+          ],
+          1,
+          5
+        ),
+        createChoice(
+          "「ポジティブなところです！」",
+          [
+            "「いいね！」",
+            "「うちはそういうコが多い。そしてよく働くね。\nキミはすぐに馴染めそうだ」"
           ],
           1,
           5
@@ -305,7 +364,34 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       }
     },
     {
-      text: "「EXは派手だし、NEOは格好いいけど、僕は面白い！ 君も面白くなりたい？」",
+      text: `「${playerName}ちゃんは大学生だよね。」`,
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
+      text: `「学生時代に一番がんばったことは、ズバリ、なに？」`,
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
+      text: `（出た・・・！ガクチカ・・・\nどうしよう・・・）`,
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
+      text: `「ガクチカを聞かせて！」`,
       background: "/images/room.jpg",
       character: {
         id: 1,
@@ -314,19 +400,28 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       },
       choices: [
         createChoice(
-          "「はい、箱さんのように面白くなりたいです」",
+          "「いろんなことを頑張りました」",
           [
-            "「そうだよね！ じゃあ、クイズ！ 面白くなるために必要なものは何でしょう？」",
-            "「ヒント：僕のトレードマークだよ！」"
+            "「そうなんだ　できればもうちょっと具体的に教えてほしかったなぁ。」",
+            "（うう・・・　もっと対策しておけばよかったぁ・・・）"
           ],
-          3,
+          -1,
           6
         ),
         createChoice(
-          "「箱さんのユーモアを学びたいです」",
+          "「アルバイトを頑張りました」",
           [
-            "「そうだよね！ じゃあ、クイズ！ 僕のユーモアの特徴は何でしょう？」",
-            "「ヒント：僕の箱の中身に関係があるよ！」"
+            "「」",
+            "「」"
+          ],
+          1,
+          6
+        ),
+        createChoice(
+          "「サークル活動です！リーダーも務めました！」",
+          [
+            "「」",
+            "「」"
           ],
           2,
           6
@@ -343,7 +438,43 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       }
     },
     {
-      text: "「最後に、何か質問はありますか？」",
+      text: `「うんうん、${playerName}ちゃんのこと、だんだんわかってきたよ」`,
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
+      text: "「じゃあ、これで最後の質問」",
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
+      text: `「ほかの男に告白されたら、${playerName}ちゃんはどうする？」`,
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
+      text: `「え・・・！？　ええっと、」\n（ほかの企業から内定をもらったら、私は・・・）`,
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
+      text: "「弊社は第何希望？正直に。」",
       background: "/images/room.jpg",
       character: {
         id: 1,
@@ -352,33 +483,62 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       },
       choices: [
         createChoice(
-          "「入社後、どのような仕事を任せていただけますか？」",
+          "「大変申し上げにくいのですが・・・・」",
           [
-            "「面白い仕事を任せるよ！ じゃあ、クイズ！ 僕の一番面白い仕事は何でしょう？」",
-            "「ヒント：僕の特技を活かした仕事だよ！」"
+            "うん・・・そっか。",
+            "ボクを選んでほしいけど、こればっかりは仕方ないよね。",
+            "（うう・・・　もっと対策しておけばよかったぁ・・・）"
           ],
-          2,
+          0,
           7
         ),
         createChoice(
-          "「社内の雰囲気について教えていただけますか？」",
+          "「持ち帰って検討させてください」",
           [
-            "「とても面白い雰囲気だよ！ じゃあ、クイズ！ 社内で一番面白い場所はどこでしょう？」",
-            "「ヒント：僕のオフィスだよ！」"
+            "",
+            ""
           ],
-          1,
+          0,
+          7
+        ),
+        createChoice(
+          "「御社が第一希望ですので、他はすべて断ります！」",
+          [
+            "",
+            ""
+          ],
+          3,
           7
         )
       ]
     },
+
     {
-      text: "「君、面白いね！ 採用だよ！ これからもっと面白いことを教えてあげる！」",
+      text: `「今日はこれで終わり！　結果はあとでメールするよ。\n気を付けて帰ってね！」`,
       background: "/images/room.jpg",
       character: {
         id: 1,
         name: "箱",
-        image: "/images/metaton_box.png"
+        image: "/images/box.png"
       }
-    }
+    },
+    {
+      text: `「はい！ありがとうございました！」`,
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
+    {
+      text: `（どうなったんだろう・・・）`,
+      background: "/images/room.jpg",
+      character: {
+        id: 1,
+        name: "箱",
+        image: "/images/box.png"
+      }
+    },
   ];
 }; 
