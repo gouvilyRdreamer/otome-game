@@ -33,15 +33,6 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 400;
   }
 
-  .response {
-    color: #4a90e2;
-    font-weight: bold;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 5px;
-  }
-
   .favorability {
     position: fixed;
     top: 20px;
@@ -196,7 +187,7 @@ const InterviewerName = styled.div`
   font-weight: 700;
 `;
 
-const scenes: Scene[] = [
+const initialScenes: Scene[] = [
   {
     text: "私の名前は yume。今日はMETA Foodsの最終面接を受けに来ました。",
     background: "/images/office-entrance.jpg"
@@ -221,9 +212,9 @@ const scenes: Scene[] = [
     text: "どの面接官にしようかな...？",
     background: "/images/office-entrance.jpg",
     choices: [
-      { text: "BOX METATON", response: "", favorabilityChange: 0, nextScene: 7 },
-      { text: "METATON EX", response: "", favorabilityChange: 0, nextScene: 7 },
-      { text: "METATON NEO", response: "", favorabilityChange: 0, nextScene: 7 }
+      { text: "BOX METATON", responses: [""], favorabilityChange: 0, nextScene: 7 },
+      { text: "METATON EX", responses: [""], favorabilityChange: 0, nextScene: 7 },
+      { text: "METATON NEO", responses: [""], favorabilityChange: 0, nextScene: 7 }
     ]
   },
   {
@@ -239,7 +230,36 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
   const [favorability, setFavorability] = useState(0);
   const [showResponse, setShowResponse] = useState(false);
   const [currentResponse, setCurrentResponse] = useState("");
+  const [currentResponseIndex, setCurrentResponseIndex] = useState(0);
+  const [selectedChoiceIndex, setSelectedChoiceIndex] = useState<number | null>(null);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [scenes, setScenes] = useState<Scene[]>(initialScenes);
+  const [responseQueue, setResponseQueue] = useState<string[]>([]);
+
+  const handleTextBoxClick = () => {
+    if (showResponse) {
+      handleNextResponse();
+    } else {
+      const currentSceneData = getCurrentSceneData();
+      if (currentSceneData?.choices) {
+        // 選択肢がある場合は何もしない（選択肢を表示する）
+        return;
+      }
+      
+      // 面接シーン（currentScene >= 6）の場合
+      if (currentScene >= 6) {
+        const interviewerScenarios = getCurrentInterviewerScenarios();
+        if (interviewerScenarios && currentInterviewerScene < interviewerScenarios.length - 1) {
+          setCurrentInterviewerScene(prev => prev + 1);
+        } else {
+          setIsGameOver(true);
+        }
+      } else {
+        // 通常のシーンの場合
+        setCurrentScene(prev => prev + 1);
+      }
+    }
+  };
 
   const handleChoice = (choiceIndex: number) => {
     const currentSceneData = getCurrentSceneData();
@@ -251,51 +271,62 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
     if (currentScene === 5) {
       const interviewer = ["箱", "メタトンEX", "メタトンNEO"][choiceIndex];
       setSelectedInterviewer(interviewer);
-      setCurrentScene(currentScene + 1);
+      setCurrentInterviewerScene(0);  // 面接シーンの初期化
+      setCurrentScene(6);  // 面接シーンに遷移
       return;
     }
 
-    if (currentScene >= 7) {
+    // 選択肢の反応をキューに追加
+    if (choice.responses && choice.responses.length > 0) {
+      setResponseQueue(choice.responses);
+      setCurrentResponseIndex(0);
+      setCurrentResponse(choice.responses[0]);
       setShowResponse(true);
-      setCurrentResponse(choice.response);
-      setFavorability(prev => prev + choice.favorabilityChange);
-      setCurrentInterviewerScene(prev => prev + 1);
+      setSelectedChoiceIndex(choiceIndex);  // 選択した選択肢のインデックスを保存
     }
+
+    // 好感度の更新
+    setFavorability(prev => prev + choice.favorabilityChange);
   };
 
-  const handleClick = () => {
-    if (showResponse) {
-      setShowResponse(false);
-      return;
-    }
-
-    const currentSceneData = getCurrentSceneData();
-    if (!currentSceneData) return;
-
-    if (currentSceneData.choices) {
-      return;
-    }
-
-    if (currentScene < 7) {
-      setCurrentScene(prev => prev + 1);
+  const handleNextResponse = () => {
+    if (currentResponseIndex < responseQueue.length - 1) {
+      setCurrentResponseIndex(prev => prev + 1);
+      setCurrentResponse(responseQueue[currentResponseIndex + 1]);
     } else {
-      const scenarios = getCurrentInterviewerScenarios();
-      if (!scenarios || currentInterviewerScene >= scenarios.length - 1) {
-        setIsGameOver(true);
-        return;
+      setShowResponse(false);
+      setResponseQueue([]);
+      const currentSceneData = getCurrentSceneData();
+      
+      // 面接シーン（currentScene >= 6）の場合
+      if (currentScene >= 6) {
+        const interviewerScenarios = getCurrentInterviewerScenarios();
+        if (interviewerScenarios && currentInterviewerScene < interviewerScenarios.length - 1) {
+          setCurrentInterviewerScene(prev => prev + 1);
+        } else {
+          setIsGameOver(true);
+        }
+      } else {
+        // 通常のシーンの場合
+        if (selectedChoiceIndex !== null && currentSceneData?.choices?.[selectedChoiceIndex]?.nextScene !== undefined) {
+          setCurrentScene(currentSceneData.choices[selectedChoiceIndex].nextScene!);
+        } else {
+          setCurrentScene(prev => prev + 1);
+        }
       }
-      setCurrentInterviewerScene(prev => prev + 1);
+      setSelectedChoiceIndex(null);  // 選択肢のインデックスをリセット
     }
   };
 
   const handleRestart = () => {
     setCurrentScene(0);
-    setSelectedInterviewer(null);
-    setCurrentInterviewerScene(0);
     setFavorability(0);
+    setSelectedInterviewer("");
     setShowResponse(false);
-    setCurrentResponse("");
+    setCurrentResponseIndex(0);
+    setSelectedChoiceIndex(null);
     setIsGameOver(false);
+    setResponseQueue([]);
   };
 
   const getCurrentSceneData = (): LocalScene | null => {
@@ -306,12 +337,12 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
           : `面接が終わりました。\n好感度: ${favorability}\n残念ながら今回は採用を見送らせていただきます。\nまたの機会に...`,
         background: "/images/office-entrance.jpg",
         choices: [
-          { text: "最初からやり直す", response: "", favorabilityChange: 0 }
+          { text: "最初からやり直す", responses: [""], favorabilityChange: 0 }
         ]
       };
     }
 
-    if (currentScene < 7) {
+    if (currentScene < 6) {
       return scenes[currentScene];
     }
 
@@ -350,53 +381,67 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
           alt={character.name}
         />
       )}
-      <TextBox onClick={handleClick}>
-        <TextContent>
-          {currentSceneData.text}
-          {!currentSceneData.choices && <DownArrow>▼</DownArrow>}
-        </TextContent>
-        {currentScene === 5 ? (
-          <InterviewerContainer>
-            {["箱", "メタトンEX", "メタトンNEO"].map((name, index) => (
-              <InterviewerCard
-                key={index}
-                className={selectedInterviewer === name ? 'selected' : ''}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleChoice(index);
-                }}
-              >
-                <InterviewerImage
-                  src={`/images/${name === "箱" ? "box" : name === "メタトンEX" ? "metaton_ex" : "metaton_neo"}.png`}
-                  alt={name}
-                />
-                <InterviewerName>{name}</InterviewerName>
-              </InterviewerCard>
-            ))}
-          </InterviewerContainer>
-        ) : choices && (
-          <Choices>
-            {choices.map((choice, index) => (
-              <ChoiceButton 
-                key={index}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (isGameOver) {
-                    handleRestart();
-                  } else {
-                    handleChoice(index);
-                  }
-                }}
-              >
-                {choice.text}
-              </ChoiceButton>
-            ))}
-          </Choices>
+      <TextBox onClick={handleTextBoxClick}>
+        {!showResponse ? (
+          <>
+            <TextContent>
+              {currentSceneData.text}
+              {!currentSceneData.choices && <DownArrow>▼</DownArrow>}
+            </TextContent>
+            {currentScene === 5 ? (
+              <InterviewerContainer>
+                {["箱", "メタトンEX", "メタトンNEO"].map((name, index) => (
+                  <InterviewerCard
+                    key={index}
+                    className={selectedInterviewer === name ? 'selected' : ''}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleChoice(index);
+                    }}
+                  >
+                    <InterviewerImage
+                      src={`/images/${name === "箱" ? "box" : name === "メタトンEX" ? "metaton_ex" : "metaton_neo"}.png`}
+                      alt={name}
+                    />
+                    <InterviewerName>{name}</InterviewerName>
+                  </InterviewerCard>
+                ))}
+              </InterviewerContainer>
+            ) : choices && (
+              <Choices>
+                {choices.map((choice, index) => (
+                  <ChoiceButton 
+                    key={index}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isGameOver) {
+                        handleRestart();
+                      } else {
+                        handleChoice(index);
+                      }
+                    }}
+                  >
+                    {choice.text}
+                  </ChoiceButton>
+                ))}
+              </Choices>
+            )}
+          </>
+        ) : (
+          <TextContent>
+            {currentResponse}
+            <DownArrow>▼</DownArrow>
+          </TextContent>
         )}
       </TextBox>
       {!isGameOver && (
         <div className="favorability">
           好感度: {favorability}
+        </div>
+      )}
+      {showResponse && (
+        <div className="response-container" onClick={handleNextResponse}>
+          <p>{currentResponse}</p>
         </div>
       )}
     </GameContainer>

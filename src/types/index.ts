@@ -1,25 +1,27 @@
-interface Character {
+export interface Character {
   id: number;
   name: string;
   image: string;
 }
 
-interface Choice {
+export interface Choice {
   text: string;
-  response: string;
+  responses: string[];
   favorabilityChange: number;
   nextScene?: number;
 }
 
-interface Scene {
+export interface Scene {
   text: string;
   background: string;
   character?: Character;
   choices?: Choice[];
 }
 
-interface Scenario {
+export interface Scenario {
   scenes: Scene[];
 }
 
-export type { Character, Choice, Scene, Scenario }; 
+export interface LocalScene extends Scene {
+  choices?: Choice[];
+} 
