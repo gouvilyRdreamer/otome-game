@@ -198,7 +198,7 @@ const InterviewerName = styled.div`
 
 const scenes: Scene[] = [
   {
-    text: "私の名前は yume。今日はMETA Foodsの最終面接を受けに来ました。",
+    text: "私の名前は 。今日はMETA Foodsの最終面接を受けに来ました。",
     background: "/images/office-entrance.jpg"
   },
   {
