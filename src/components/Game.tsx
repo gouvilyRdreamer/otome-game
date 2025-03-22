@@ -198,28 +198,47 @@ const InterviewerName = styled.div`
   font-weight: 700;
 `;
 
+const FadeOverlay = styled.div<{ isFading: boolean }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: black;
+  opacity: ${props => props.isFading ? 1 : 0};
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
+  z-index: 1000;
+`;
+
 const initialScenes: Scene[] = [
   {
+    id: 1,
     text: "私は絶賛就活中の大学3年生！\nじつは、第一希望の最終面接を控えてる・・・",
     background: "/images/campus.jpg"
   },
   {
+    id: 2,
     text: "META Foodsは、世界中の食品を取り扱う大手商社。",
     background: "/images/campus.jpg"
   },
   {
+    id: 3,
     text: "企業ホームページによると、最終面接は「社長面接」。",
     background: "/images/campus.jpg"
   },
   {
+    id: 4,
     text: "つまり、面接官は、なんとあの人気アイドル兼スゴ腕経営者の「メタトン」！",
     background: "/images/campus.jpg"
   },
   {
+    id: 5,
     text: "メタトンには3つの形態があって、求職者が好きな形態を選んで面接してもらえるらしい。",
     background: "/images/campus.jpg"
   },
   {
+    id: 6,
     text: "誰に面接してもらう？",
     background: "/images/campus.jpg",
     choices: [
@@ -229,6 +248,7 @@ const initialScenes: Scene[] = [
     ]
   },
   {
+    id: 7,
     text: "緊張するなあ...",
     background: "/images/room.jpg"
   }
@@ -248,41 +268,65 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
   const [responseQueue, setResponseQueue] = useState<string[]>([]);
   const [playerName, setPlayerName] = useState("");
   const [isNameInput, setIsNameInput] = useState(false);
+  const [isFading, setIsFading] = useState(false);
+  const [nameInputVisible, setNameInputVisible] = useState(false);
 
   const handleNameSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (playerName.trim()) {
-      setIsNameInput(false);
-      setCurrentInterviewerScene(prev => prev + 1);
+      setNameInputVisible(false);
+      setCurrentInterviewerScene(prev => prev + 1);  // 名前入力後に次のシーンに進む
     }
   };
 
+  const handleSceneTransition = (callback: () => void) => {
+    setIsFading(true);
+    setTimeout(() => {
+      callback();
+      setIsFading(false);
+    }, 500);
+  };
+
   const handleTextBoxClick = () => {
+    if (currentScene >= 6) {
+      const currentSceneData = getCurrentSceneData();
+      if (currentSceneData?.text.includes('キミの名前を教えてくれるかな？')) {
+        setNameInputVisible(true);
+        return;
+      }
+    }
+    if (nameInputVisible) {
+      return;  // 名前入力フォームが表示されている場合は何もしない
+    }
     if (showResponse) {
       handleNextResponse();
     } else {
       const currentSceneData = getCurrentSceneData();
       if (currentSceneData?.choices) {
-        // 選択肢がある場合は何もしない（選択肢を表示する）
         return;
       }
       
-      // 名前入力シーンの場合
-      if (currentSceneData?.text === "「それじゃ、まずはキミの名前を教えてくれるかな？」") {
-        setIsNameInput(true);
-        return;
-      }
-      
-      // 面接シーン（currentScene >= 6）の場合
       if (currentScene >= 6) {
         const interviewerScenarios = getCurrentInterviewerScenarios();
-        if (interviewerScenarios && currentInterviewerScene < interviewerScenarios.length - 1) {
-          setCurrentInterviewerScene(prev => prev + 1);
+        if (interviewerScenarios && currentInterviewerScene < interviewerScenarios.length) {
+          if (currentInterviewerScene === interviewerScenarios.length - 1) {
+            handleSceneTransition(() => {
+              setIsGameOver(true);
+            });
+          } else {
+            const nextScene = interviewerScenarios[currentInterviewerScene + 1];
+            if (nextScene?.shouldFade) {
+              handleSceneTransition(() => {
+                setCurrentInterviewerScene(prev => prev + 1);
+              });
+            } else {
+              setCurrentInterviewerScene(prev => prev + 1);
+            }
+          }
         } else {
           setIsGameOver(true);
         }
       } else {
-        // 通常のシーンの場合
         setCurrentScene(prev => prev + 1);
       }
     }
@@ -297,22 +341,22 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
 
     if (currentScene === 5) {
       const interviewer = ["箱", "メタトンEX", "メタトンNEO"][choiceIndex];
-      setSelectedInterviewer(interviewer);
-      setCurrentInterviewerScene(0);  // 面接シーンの初期化
-      setCurrentScene(6);  // 面接シーンに遷移
+      handleSceneTransition(() => {
+        setSelectedInterviewer(interviewer);
+        setCurrentInterviewerScene(0);
+        setCurrentScene(6);
+      });
       return;
     }
 
-    // 選択肢の反応をキューに追加
     if (choice.responses && choice.responses.length > 0) {
       setResponseQueue(choice.responses);
       setCurrentResponseIndex(0);
       setCurrentResponse(choice.responses[0]);
       setShowResponse(true);
-      setSelectedChoiceIndex(choiceIndex);  // 選択した選択肢のインデックスを保存
+      setSelectedChoiceIndex(choiceIndex);
     }
 
-    // 好感度の更新
     setFavorability(prev => prev + choice.favorabilityChange);
   };
 
@@ -325,23 +369,37 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
       setResponseQueue([]);
       const currentSceneData = getCurrentSceneData();
       
-      // 面接シーン（currentScene >= 6）の場合
       if (currentScene >= 6) {
         const interviewerScenarios = getCurrentInterviewerScenarios();
-        if (interviewerScenarios && currentInterviewerScene < interviewerScenarios.length - 1) {
-          setCurrentInterviewerScene(prev => prev + 1);
+        if (interviewerScenarios && currentInterviewerScene < interviewerScenarios.length) {
+          if (currentInterviewerScene === interviewerScenarios.length - 1) {
+            handleSceneTransition(() => {
+              setIsGameOver(true);
+            });
+          } else {
+            const nextScene = interviewerScenarios[currentInterviewerScene + 1];
+            if (nextScene?.shouldFade) {
+              handleSceneTransition(() => {
+                setCurrentInterviewerScene(prev => prev + 1);
+              });
+            } else {
+              setCurrentInterviewerScene(prev => prev + 1);
+            }
+          }
         } else {
           setIsGameOver(true);
         }
       } else {
-        // 通常のシーンの場合
         if (selectedChoiceIndex !== null && currentSceneData?.choices?.[selectedChoiceIndex]?.nextScene !== undefined) {
-          setCurrentScene(currentSceneData.choices[selectedChoiceIndex].nextScene!);
+          const nextScene = currentSceneData.choices[selectedChoiceIndex].nextScene;
+          if (nextScene !== undefined) {
+            setCurrentScene(nextScene);
+          }
         } else {
           setCurrentScene(prev => prev + 1);
         }
       }
-      setSelectedChoiceIndex(null);  // 選択肢のインデックスをリセット
+      setSelectedChoiceIndex(null);
     }
   };
 
@@ -401,6 +459,7 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
   return (
     <GameContainer>
       <GlobalStyle />
+      <FadeOverlay isFading={isFading} />
       <Background image={currentSceneData.background} />
       {character && (
         <CharacterImage 
@@ -412,7 +471,7 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
         {!showResponse ? (
           <>
             <TextContent>
-              {isNameInput ? (
+              {nameInputVisible ? (
                 <NameInputForm onSubmit={handleNameSubmit}>
                   <NameInput
                     type="text"

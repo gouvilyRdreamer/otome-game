@@ -12,10 +12,12 @@ export interface Choice {
 }
 
 export interface Scene {
+  id: number;
   text: string;
   background: string;
   character?: Character;
   choices?: Choice[];
+  shouldFade?: boolean;
 }
 
 export interface Scenario {

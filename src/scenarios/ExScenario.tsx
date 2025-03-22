@@ -15,7 +15,8 @@ const createChoice = (
 export const createExScenarios = (playerName: string): Scene[] => {
   return [
     {
-      text: `「こんにちは。メタトンEXです。」`,
+      id: 1,
+      text: `「それじゃ、まずはキミの名前を教えてくれるかな？」`,
       background: "/images/room.jpg",
       character: {
         id: 1,
@@ -24,6 +25,7 @@ export const createExScenarios = (playerName: string): Scene[] => {
       }
     },
     {
+      id: 2,
       text: "「では、面接を始めましょう」",
       background: "/images/room.jpg",
       character: {
@@ -33,6 +35,7 @@ export const createExScenarios = (playerName: string): Scene[] => {
       }
     },
     {
+      id: 3,
       text: "「自己紹介をお願いします」",
       background: "/images/room.jpg",
       character: {
@@ -48,7 +51,7 @@ export const createExScenarios = (playerName: string): Scene[] => {
             "「ヒント：僕の名前に関係があるよ！」"
           ],
           2,
-          3
+          4
         ),
         createChoice(
           "「私は就活に励む大学3年生です」",
@@ -58,11 +61,12 @@ export const createExScenarios = (playerName: string): Scene[] => {
             "「ヒント：僕の箱の中身を見てみて！」"
           ],
           1,
-          3
+          4
         )
       ]
     },
     {
+      id: 4,
       text: "「乙女ゲームが好きなんですね！ じゃあ、箱とNEOのどっちが好き？ え？ どっちも？ ふふっ、面白いね。でも、僕のクイズの方が面白いでしょ？」",
       background: "/images/room.jpg",
       character: {
@@ -78,7 +82,7 @@ export const createExScenarios = (playerName: string): Scene[] => {
             "「ヒント：僕のテレビ番組でよく使うネタだよ！」"
           ],
           3,
-          4
+          5
         ),
         createChoice(
           "「EXさんのクイズは独特で面白いですね」",
@@ -87,11 +91,12 @@ export const createExScenarios = (playerName: string): Scene[] => {
             "「ヒント：僕のキャラクター性に関係があるよ！」"
           ],
           2,
-          4
+          5
         )
       ]
     },
     {
+      id: 5,
       text: "「なるほど。では、なぜMETAフーズを志望されたのですか？」",
       background: "/images/room.jpg",
       character: {
@@ -107,7 +112,7 @@ export const createExScenarios = (playerName: string): Scene[] => {
             "「ヒント：僕の特技を活かしたコーナーだよ！」"
           ],
           2,
-          5
+          6
         ),
         createChoice(
           "「METAフーズの商品が大好きだからです」",
@@ -116,11 +121,12 @@ export const createExScenarios = (playerName: string): Scene[] => {
             "「ヒント：僕のキャラクター商品だよ！」"
           ],
           1,
-          5
+          6
         )
       ]
     },
     {
+      id: 6,
       text: "「箱は面白いし、NEOは格好いいけど、僕は派手！ 君も派手になりたい？」",
       background: "/images/room.jpg",
       character: {
@@ -136,7 +142,7 @@ export const createExScenarios = (playerName: string): Scene[] => {
             "「ヒント：僕のトレードマークだよ！」"
           ],
           3,
-          6
+          7
         ),
         createChoice(
           "「EXさんのユーモアを学びたいです」",
@@ -145,11 +151,12 @@ export const createExScenarios = (playerName: string): Scene[] => {
             "「ヒント：僕のテレビでのキャラクター性だよ！」"
           ],
           2,
-          6
+          7
         )
       ]
     },
     {
+      id: 7,
       text: "「最後に、何か質問はありますか？」",
       background: "/images/room.jpg",
       character: {
@@ -165,7 +172,7 @@ export const createExScenarios = (playerName: string): Scene[] => {
             "「ヒント：僕の特技を活かした仕事だよ！」"
           ],
           2,
-          7
+          8
         ),
         createChoice(
           "「社内の雰囲気について教えていただけますか？」",
@@ -174,11 +181,12 @@ export const createExScenarios = (playerName: string): Scene[] => {
             "「ヒント：僕のオフィスだよ！」"
           ],
           1,
-          7
+          8
         )
       ]
     },
     {
+      id: 8,
       text: "「君、面白いね！ 採用だよ！ これからもっと面白いことを教えてあげる！」",
       background: "/images/room.jpg",
       character: {

@@ -15,6 +15,7 @@ const createChoice = (
 export const createNeoScenarios = (playerName: string): Scene[] => {
   return [
     {
+      id: 1,
       text: `「こんにちは。メタトンNEOです。」`,
       background: "/images/room.jpg",
       character: {
@@ -24,7 +25,8 @@ export const createNeoScenarios = (playerName: string): Scene[] => {
       }
     },
     {
-      text: "「では、面接を始めましょう」",
+      id: 2,
+      text: "「それじゃ、まずはキミの名前を教えてくれるかな？」",
       background: "/images/room.jpg",
       character: {
         id: 3,
@@ -33,6 +35,7 @@ export const createNeoScenarios = (playerName: string): Scene[] => {
       }
     },
     {
+      id: 3,
       text: "「自己紹介をお願いします」",
       background: "/images/room.jpg",
       character: {
@@ -63,6 +66,7 @@ export const createNeoScenarios = (playerName: string): Scene[] => {
       ]
     },
     {
+      id: 4,
       text: "「乙女ゲームが好きなんですね！ じゃあ、EXと箱のどっちが好き？ え？ どっちも？ ふふっ、面白いね。でも、僕のクイズの方が面白いでしょ？」",
       background: "/images/room.jpg",
       character: {
@@ -92,6 +96,7 @@ export const createNeoScenarios = (playerName: string): Scene[] => {
       ]
     },
     {
+      id: 5,
       text: "「なるほど。では、なぜMETAフーズを志望されたのですか？」",
       background: "/images/room.jpg",
       character: {
@@ -121,6 +126,7 @@ export const createNeoScenarios = (playerName: string): Scene[] => {
       ]
     },
     {
+      id: 6,
       text: "「EXは派手だし、箱は面白いけど、僕は格好いい！ 君も格好よくなりたい？」",
       background: "/images/room.jpg",
       character: {
@@ -150,6 +156,7 @@ export const createNeoScenarios = (playerName: string): Scene[] => {
       ]
     },
     {
+      id: 7,
       text: "「最後に、何か質問はありますか？」",
       background: "/images/room.jpg",
       character: {
@@ -179,6 +186,7 @@ export const createNeoScenarios = (playerName: string): Scene[] => {
       ]
     },
     {
+      id: 8,
       text: "「君、格好いいね！ 採用だよ！ これからもっと格好いいことを教えてあげる！」",
       background: "/images/room.jpg",
       character: {
