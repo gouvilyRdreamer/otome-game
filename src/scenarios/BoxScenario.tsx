@@ -38,7 +38,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -47,7 +47,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -56,7 +56,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -65,7 +65,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -74,7 +74,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -83,7 +83,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -92,7 +92,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -101,7 +101,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -110,7 +110,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -119,7 +119,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -128,7 +128,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -137,7 +137,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -146,7 +146,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -200,7 +200,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -209,7 +209,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -218,7 +218,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -227,7 +227,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -236,7 +236,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -284,7 +284,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -293,7 +293,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -302,7 +302,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -311,7 +311,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -360,7 +360,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -369,7 +369,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -378,7 +378,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -387,7 +387,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -434,7 +434,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -443,7 +443,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -452,7 +452,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -461,7 +461,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -470,7 +470,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -519,7 +519,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -528,7 +528,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
     {
@@ -537,7 +537,7 @@ export const createBoxScenarios = (playerName: string): Scene[] => {
       character: {
         id: 1,
         name: "箱",
-        image: "/images/box.png"
+        image: "/images/metaton_box.png"
       }
     },
   ];

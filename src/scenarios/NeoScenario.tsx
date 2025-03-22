@@ -15,12 +15,12 @@ const createChoice = (
 export const createNeoScenarios = (playerName: string): Scene[] => {
   return [
     {
-      text: `「${playerName}さん、こんにちは。メタトンNEOです。」`,
-      background: 'interview-room',
+      text: `「こんにちは。メタトンNEOです。」`,
+      background: "/images/room.jpg",
       character: {
         id: 1,
         name: 'メタトンNEO',
-        image: 'metaton-neo.png'
+        image: "/images/metaton_neo.png"
       }
     },
     {

@@ -116,7 +116,7 @@ const DownArrow = styled.span`
 
 const CharacterImage = styled.img`
   position: absolute;
-  bottom: 200px;
+  bottom: 90px;
   left: 50%;
   transform: translateX(-50%);
   max-height: 400px;
@@ -444,7 +444,7 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
                     }}
                   >
                     <InterviewerImage
-                      src={`/images/${name === "箱" ? "box" : name === "メタトンEX" ? "metaton_ex" : "metaton_neo"}.png`}
+                      src={`/images/${name === "箱" ? "metaton_box" : name === "メタトンEX" ? "metaton_ex" : "metaton_neo"}.png`}
                       alt={name}
                     />
                     <InterviewerName>{name}</InterviewerName>

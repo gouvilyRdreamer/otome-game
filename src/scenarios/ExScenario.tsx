@@ -15,12 +15,12 @@ const createChoice = (
 export const createExScenarios = (playerName: string): Scene[] => {
   return [
     {
-      text: `「${playerName}さん、こんにちは。メタトンEXです。」`,
-      background: 'interview-room',
+      text: `「こんにちは。メタトンEXです。」`,
+      background: "/images/room.jpg",
       character: {
         id: 1,
         name: 'メタトンEX',
-        image: 'metaton-ex.png'
+        image: "/images/metaton_ex.png"
       }
     },
     {
