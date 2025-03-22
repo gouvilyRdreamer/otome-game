@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-import { boxScenarios } from '../scenarios/BoxScenario';
-import { exScenarios } from '../scenarios/ExScenario';
-import { neoScenarios } from '../scenarios/NeoScenario';
+import { createBoxScenarios } from '../scenarios/BoxScenario';
+import { createExScenarios } from '../scenarios/ExScenario';
+import { createNeoScenarios } from '../scenarios/NeoScenario';
 import { Scene, Choice, Character } from '../types/index';
 
 interface GameProps {
@@ -31,15 +31,6 @@ const GlobalStyle = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
     font-size: 24px;
     font-weight: 400;
-  }
-
-  .response {
-    color: #4a90e2;
-    font-weight: bold;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 5px;
   }
 
   .favorability {
@@ -85,6 +76,17 @@ const TextBox = styled.div`
   font-size: 20px;
   line-height: 1.6;
   font-weight: 400;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+
+  button {
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+  }
 `;
 
 const TextContent = styled.div`
@@ -114,7 +116,7 @@ const DownArrow = styled.span`
 
 const CharacterImage = styled.img`
   position: absolute;
-  bottom: 200px;
+  bottom: 90px;
   left: 50%;
   transform: translateX(-50%);
   max-height: 400px;
@@ -196,39 +198,59 @@ const InterviewerName = styled.div`
   font-weight: 700;
 `;
 
-const scenes: Scene[] = [
+const FadeOverlay = styled.div<{ isFading: boolean }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: black;
+  opacity: ${props => props.isFading ? 1 : 0};
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
+  z-index: 1000;
+`;
+
+const initialScenes: Scene[] = [
   {
-    text: "私の名前は　ゆめ。今日はMETA Foodsの最終面接を受けに来ました。",
-    background: "/images/office-entrance.jpg"
+    id: 1,
+    text: "私は絶賛就活中の大学3年生！\nじつは、第一希望の最終面接を控えてる・・・",
+    background: "/images/campus.jpg"
   },
   {
+    id: 2,
     text: "META Foodsは、世界中の食品を取り扱う大手商社。",
-    background: "/images/office-entrance.jpg"
+    background: "/images/campus.jpg"
   },
   {
-    text: "会社のホームページによると、最終面接は「特別な面接官」が担当するとのこと。",
-    background: "/images/office-entrance.jpg"
+    id: 3,
+    text: "企業ホームページによると、最終面接は「社長面接」。",
+    background: "/images/campus.jpg"
   },
   {
-    text: "その面接官とは、なんと人気アイドル「メタトン」だそう！",
-    background: "/images/office-entrance.jpg"
+    id: 4,
+    text: "つまり、面接官は、なんとあの人気アイドル兼スゴ腕経営者の「メタトン」！",
+    background: "/images/campus.jpg"
   },
   {
-    text: "メタトンには3つの形態があり、それぞれ異なる面接官が担当してくれるらしい。",
-    background: "/images/office-entrance.jpg"
+    id: 5,
+    text: "メタトンには3つの形態があって、求職者が好きな形態を選んで面接してもらえるらしい。",
+    background: "/images/campus.jpg"
   },
   {
-    text: "どの面接官に面接してもらおうかな...",
-    background: "/images/office-entrance.jpg",
+    id: 6,
+    text: "誰に面接してもらう？",
+    background: "/images/campus.jpg",
     choices: [
-      { text: "BOX METATON", response: "", favorabilityChange: 0, nextScene: 7 },
-      { text: "METATON EX", response: "", favorabilityChange: 0, nextScene: 7 },
-      { text: "METATON NEO", response: "", favorabilityChange: 0, nextScene: 7 }
+      { text: "BOX METATON", responses: [""], favorabilityChange: 0, nextScene: 7 },
+      { text: "METATON EX", responses: [""], favorabilityChange: 0, nextScene: 7 },
+      { text: "METATON NEO", responses: [""], favorabilityChange: 0, nextScene: 7 }
     ]
   },
   {
+    id: 7,
     text: "緊張するなあ...",
-    background: "/images/office-entrance.jpg"
+    background: "/images/room.jpg"
   }
 ];
 
@@ -239,7 +261,76 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
   const [favorability, setFavorability] = useState(0);
   const [showResponse, setShowResponse] = useState(false);
   const [currentResponse, setCurrentResponse] = useState("");
+  const [currentResponseIndex, setCurrentResponseIndex] = useState(0);
+  const [selectedChoiceIndex, setSelectedChoiceIndex] = useState<number | null>(null);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [scenes, setScenes] = useState<Scene[]>(initialScenes);
+  const [responseQueue, setResponseQueue] = useState<string[]>([]);
+  const [playerName, setPlayerName] = useState("");
+  const [isNameInput, setIsNameInput] = useState(false);
+  const [isFading, setIsFading] = useState(false);
+  const [nameInputVisible, setNameInputVisible] = useState(false);
+
+  const handleNameSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (playerName.trim()) {
+      setNameInputVisible(false);
+      setCurrentInterviewerScene(prev => prev + 1);  // 名前入力後に次のシーンに進む
+    }
+  };
+
+  const handleSceneTransition = (callback: () => void) => {
+    setIsFading(true);
+    setTimeout(() => {
+      callback();
+      setIsFading(false);
+    }, 500);
+  };
+
+  const handleTextBoxClick = () => {
+    if (currentScene >= 6) {
+      const currentSceneData = getCurrentSceneData();
+      if (currentSceneData?.text.includes('キミの名前を教えてくれるかな？')) {
+        setNameInputVisible(true);
+        return;
+      }
+    }
+    if (nameInputVisible) {
+      return;  // 名前入力フォームが表示されている場合は何もしない
+    }
+    if (showResponse) {
+      handleNextResponse();
+    } else {
+      const currentSceneData = getCurrentSceneData();
+      if (currentSceneData?.choices) {
+        return;
+      }
+      
+      if (currentScene >= 6) {
+        const interviewerScenarios = getCurrentInterviewerScenarios();
+        if (interviewerScenarios && currentInterviewerScene < interviewerScenarios.length) {
+          if (currentInterviewerScene === interviewerScenarios.length - 1) {
+            handleSceneTransition(() => {
+              setIsGameOver(true);
+            });
+          } else {
+            const nextScene = interviewerScenarios[currentInterviewerScene + 1];
+            if (nextScene?.shouldFade) {
+              handleSceneTransition(() => {
+                setCurrentInterviewerScene(prev => prev + 1);
+              });
+            } else {
+              setCurrentInterviewerScene(prev => prev + 1);
+            }
+          }
+        } else {
+          setIsGameOver(true);
+        }
+      } else {
+        setCurrentScene(prev => prev + 1);
+      }
+    }
+  };
 
   const handleChoice = (choiceIndex: number) => {
     const currentSceneData = getCurrentSceneData();
@@ -250,68 +341,93 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
 
     if (currentScene === 5) {
       const interviewer = ["箱", "メタトンEX", "メタトンNEO"][choiceIndex];
-      setSelectedInterviewer(interviewer);
-      setCurrentScene(currentScene + 1);
+      handleSceneTransition(() => {
+        setSelectedInterviewer(interviewer);
+        setCurrentInterviewerScene(0);
+        setCurrentScene(6);
+      });
       return;
     }
 
-    if (currentScene >= 7) {
+    if (choice.responses && choice.responses.length > 0) {
+      setResponseQueue(choice.responses);
+      setCurrentResponseIndex(0);
+      setCurrentResponse(choice.responses[0]);
       setShowResponse(true);
-      setCurrentResponse(choice.response);
-      setFavorability(prev => prev + choice.favorabilityChange);
-      setCurrentInterviewerScene(prev => prev + 1);
+      setSelectedChoiceIndex(choiceIndex);
     }
+
+    setFavorability(prev => prev + choice.favorabilityChange);
   };
 
-  const handleClick = () => {
-    if (showResponse) {
-      setShowResponse(false);
-      return;
-    }
-
-    const currentSceneData = getCurrentSceneData();
-    if (!currentSceneData) return;
-
-    if (currentSceneData.choices) {
-      return;
-    }
-
-    if (currentScene < 7) {
-      setCurrentScene(prev => prev + 1);
+  const handleNextResponse = () => {
+    if (currentResponseIndex < responseQueue.length - 1) {
+      setCurrentResponseIndex(prev => prev + 1);
+      setCurrentResponse(responseQueue[currentResponseIndex + 1]);
     } else {
-      const scenarios = getCurrentInterviewerScenarios();
-      if (!scenarios || currentInterviewerScene >= scenarios.length - 1) {
-        setIsGameOver(true);
-        return;
+      setShowResponse(false);
+      setResponseQueue([]);
+      const currentSceneData = getCurrentSceneData();
+      
+      if (currentScene >= 6) {
+        const interviewerScenarios = getCurrentInterviewerScenarios();
+        if (interviewerScenarios && currentInterviewerScene < interviewerScenarios.length) {
+          if (currentInterviewerScene === interviewerScenarios.length - 1) {
+            handleSceneTransition(() => {
+              setIsGameOver(true);
+            });
+          } else {
+            const nextScene = interviewerScenarios[currentInterviewerScene + 1];
+            if (nextScene?.shouldFade) {
+              handleSceneTransition(() => {
+                setCurrentInterviewerScene(prev => prev + 1);
+              });
+            } else {
+              setCurrentInterviewerScene(prev => prev + 1);
+            }
+          }
+        } else {
+          setIsGameOver(true);
+        }
+      } else {
+        if (selectedChoiceIndex !== null && currentSceneData?.choices?.[selectedChoiceIndex]?.nextScene !== undefined) {
+          const nextScene = currentSceneData.choices[selectedChoiceIndex].nextScene;
+          if (nextScene !== undefined) {
+            setCurrentScene(nextScene);
+          }
+        } else {
+          setCurrentScene(prev => prev + 1);
+        }
       }
-      setCurrentInterviewerScene(prev => prev + 1);
+      setSelectedChoiceIndex(null);
     }
   };
 
   const handleRestart = () => {
     setCurrentScene(0);
-    setSelectedInterviewer(null);
-    setCurrentInterviewerScene(0);
     setFavorability(0);
+    setSelectedInterviewer("");
     setShowResponse(false);
-    setCurrentResponse("");
+    setCurrentResponseIndex(0);
+    setSelectedChoiceIndex(null);
     setIsGameOver(false);
+    setResponseQueue([]);
   };
 
   const getCurrentSceneData = (): LocalScene | null => {
     if (isGameOver) {
       return {
         text: favorability >= 10 
-          ? `面接が終わりました。\n好感度: ${favorability}\n${selectedInterviewer}さんから「採用！」の声がかかりました！\nこれから一緒に楽しく働けそうですね！`
-          : `面接が終わりました。\n好感度: ${favorability}\n残念ながら今回は採用を見送らせていただきます。\nまたの機会に...`,
+          ? `${playerName}さん、面接が終わりました。\n好感度: ${favorability}\n${selectedInterviewer}さんから「採用！」の声がかかりました！\nこれから一緒に楽しく働けそうですね！`
+          : `${playerName}さん、面接が終わりました。\n好感度: ${favorability}\n残念ながら今回は採用を見送らせていただきます。\nまたの機会に...`,
         background: "/images/office-entrance.jpg",
         choices: [
-          { text: "最初からやり直す", response: "", favorabilityChange: 0 }
+          { text: "最初からやり直す", responses: [""], favorabilityChange: 0 }
         ]
       };
     }
 
-    if (currentScene < 7) {
+    if (currentScene < 6) {
       return scenes[currentScene];
     }
 
@@ -325,11 +441,11 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
 
   const getCurrentInterviewerScenarios = () => {
     if (selectedInterviewer === "箱") {
-      return boxScenarios;
+      return createBoxScenarios(playerName);
     } else if (selectedInterviewer === "メタトンEX") {
-      return exScenarios;
+      return createExScenarios(playerName);
     } else if (selectedInterviewer === "メタトンNEO") {
-      return neoScenarios;
+      return createNeoScenarios(playerName);
     }
     return [];
   };
@@ -343,6 +459,7 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
   return (
     <GameContainer>
       <GlobalStyle />
+      <FadeOverlay isFading={isFading} />
       <Background image={currentSceneData.background} />
       {character && (
         <CharacterImage 
@@ -350,48 +467,74 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
           alt={character.name}
         />
       )}
-      <TextBox onClick={handleClick}>
-        <TextContent>
-          {currentSceneData.text}
-          {!currentSceneData.choices && <DownArrow>▼</DownArrow>}
-        </TextContent>
-        {currentScene === 5 ? (
-          <InterviewerContainer>
-            {["箱", "メタトンEX", "メタトンNEO"].map((name, index) => (
-              <InterviewerCard
-                key={index}
-                className={selectedInterviewer === name ? 'selected' : ''}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleChoice(index);
-                }}
-              >
-                <InterviewerImage
-                  src={`/images/${name === "箱" ? "box" : name === "メタトンEX" ? "metaton_ex" : "metaton_neo"}.png`}
-                  alt={name}
-                />
-                <InterviewerName>{name}</InterviewerName>
-              </InterviewerCard>
-            ))}
-          </InterviewerContainer>
-        ) : choices && (
-          <Choices>
-            {choices.map((choice, index) => (
-              <ChoiceButton 
-                key={index}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (isGameOver) {
-                    handleRestart();
-                  } else {
-                    handleChoice(index);
-                  }
-                }}
-              >
-                {choice.text}
-              </ChoiceButton>
-            ))}
-          </Choices>
+      <TextBox onClick={handleTextBoxClick}>
+        {!showResponse ? (
+          <>
+            <TextContent>
+              {nameInputVisible ? (
+                <NameInputForm onSubmit={handleNameSubmit}>
+                  <NameInput
+                    type="text"
+                    value={playerName}
+                    onChange={(e) => setPlayerName(e.target.value)}
+                    placeholder="入力してください"
+                    autoFocus
+                  />
+                  <SubmitButton type="submit" disabled={!playerName.trim()}>
+                    決定
+                  </SubmitButton>
+                </NameInputForm>
+              ) : (
+                <>
+                  {currentSceneData.text}
+                  {!currentSceneData.choices && <DownArrow>▼</DownArrow>}
+                </>
+              )}
+            </TextContent>
+            {currentScene === 5 ? (
+              <InterviewerContainer>
+                {["箱", "メタトンEX", "メタトンNEO"].map((name, index) => (
+                  <InterviewerCard
+                    key={index}
+                    className={selectedInterviewer === name ? 'selected' : ''}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleChoice(index);
+                    }}
+                  >
+                    <InterviewerImage
+                      src={`/images/${name === "箱" ? "metaton_box" : name === "メタトンEX" ? "metaton_ex" : "metaton_neo"}.png`}
+                      alt={name}
+                    />
+                    <InterviewerName>{name}</InterviewerName>
+                  </InterviewerCard>
+                ))}
+              </InterviewerContainer>
+            ) : choices && (
+              <Choices>
+                {choices.map((choice, index) => (
+                  <ChoiceButton 
+                    key={index}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isGameOver) {
+                        handleRestart();
+                      } else {
+                        handleChoice(index);
+                      }
+                    }}
+                  >
+                    {choice.text}
+                  </ChoiceButton>
+                ))}
+              </Choices>
+            )}
+          </>
+        ) : (
+          <TextContent>
+            {currentResponse}
+            <DownArrow>▼</DownArrow>
+          </TextContent>
         )}
       </TextBox>
       {!isGameOver && (
@@ -399,8 +542,61 @@ const Game: React.FC<GameProps> = ({ onGameOver }) => {
           好感度: {favorability}
         </div>
       )}
+      {showResponse && (
+        <div className="response-container" onClick={handleNextResponse}>
+          <p>{currentResponse}</p>
+        </div>
+      )}
     </GameContainer>
   );
 };
+
+const NameInputForm = styled.form`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+`;
+
+const NameInput = styled.input`
+  width: 70%;
+  padding: 10px;
+  font-size: 1.2em;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  
+  &:focus {
+    outline: none;
+    border-color: #ff69b4;
+  }
+  
+  &::placeholder {
+    color: #999;
+  }
+`;
+
+const SubmitButton = styled.button`
+  padding: 10px 20px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 5px;
+  background: #ff69b4;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background: #ff69b4;
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+`;
 
 export default Game; 
